@@ -5,43 +5,71 @@
     <body>
         <div id="app">
             <h1>Contact Form</h1>
+
             <p style="color:red;">{{ error }}</p>
+
             <form method="post" action="#">
                 <div>
                     <label for="name">Name</label>
-                    <input name="name" id="name" v-model="name"/>
+                    <input name="name" id="name" v-model="form.name"/>
+                    <p style="color:red;">{{ validateName }}</p>
                 </div>
                 <div>
                     <label for="email">Email</label>
-                    <input name="email" id="email" v-model="email"/>
+                    <input name="email" id="email" v-model="form.email"/>
+                    <p style="color:red;">{{ validateEmail }}</p>
+
                 </div>
                 <div>
                     <label for="message">Message</label>
-                    <textarea name="message" id="message" v-model="message"></textarea>
+                    <textarea name="message" id="message" v-model="form.message"></textarea>
+                    <p style="color:red;">{{ validateMessage }}</p>
+
                 </div>
-                <button @click.prevent = "validateForm">Send Form</button>
+                <button @click.prevent="validateForm">Send Form</button>
             </form>
+
             <h2>Form Details</h2>
-                <p><strong>Name</strong> {{ name }}</p>
-                <p><strong>Email</strong> {{ email }}</p>
-                <p><strong>Message</strong> {{ message }}</p>
+                <p><strong>Name:</strong> {{ form.name }}</p>
+                <p><strong>Email:</strong> {{ form.email }}</p>
+                <p><strong>Message:</strong> {{ form.message }}</p>
+
         </div>
 
         <script>
             var app = new Vue({
                 el: '#app',
                 data: {
-                    name: '',
-                    email: '',
-                    message: '',
+                    form: {
+                        name: '',
+                        email: '',
+                        message: '',
+                    },
                     error: '',
                 },
                 methods: {
                     validateForm: function() {
-                        if(this.name.length && this.email.length && this.message.length){
+                        if(this.form.name.length && this.form.email.length && this.form.message.length){
                             return this.error = "Form Successfully sent!"
                         }
-                        return this.error = "Form failed"
+                        return this.error = "Invalid Form"
+                    }
+                },
+                computed: {
+                    validateName: function() {
+                        if(!this.form.name.length && this.error) {
+                            return 'Name field required'
+                        }
+                    },
+                    validateEmail: function() {
+                        if(!this.form.email.length && this.error) {
+                            return 'Email field required'
+                        }
+                    },
+                    validateMessage: function() {
+                        if(!this.form.message.length && this.error) {
+                            return 'Message field required'
+                        }
                     }
                 }
             })
